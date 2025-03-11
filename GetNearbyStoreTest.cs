@@ -8,7 +8,7 @@ using TestAutomation.Helpers;
 using TestAutomation.TestRailUtil;
 using TestAutomation.ApiModel;
 using Newtonsoft.Json;
-using System.DirectoryServices.Protocols;
+using static TestAutomation.ApiModel.NearbyStoresModel;
 
 [TestClass]
 public class GetNearbyStoresTest
@@ -1145,39 +1145,152 @@ public class GetNearbyStoresTest
             throw new ArgumentException("Response body should not be empty.");
         }
 
-        // Deserialize the response JSON into the ApiResponse model.
-        NearbyStoresApiResponseValidationModel? apiResponse = JsonConvert.DeserializeObject<NearbyStoresApiResponseValidationModel>(responseBody);
+        var apiResponse = JsonConvert.DeserializeObject<NearbyStoresApiResponseModel>(responseBody);
         if (apiResponse == null || apiResponse.Stores == null)
         {
             throw new Exception("Response data should not be null.");
         }
 
-        foreach (NearbyStoresApiResponseValidationModel store in stores)
+        foreach (var storeContainer in apiResponse.Stores)
         {
-            // Validate each property in the response.
-            _ = store.ShouldNotBeNull("Response data should not be null.");
-            _ = store.StoreNumber.ShouldBeOfType<int?>("Store number should be of type int?");
-            _ = store.Id.ShouldBeOfType<int?>("ID should be of type int?");
-            _ = store.Name.ShouldBeOfType<string>("Name should be of type string.");
-            _ = store.BrandName.ShouldBeOfType<string>("BrandName should be of type string.");
-            _ = store.PhoneNumber.ShouldBeOfType<string>("Phone number should be of type string.");
-            _ = store.DistrictId.ShouldBeOfType<int?>("District Id should be of type int?");
-            _ = store.OwnershipTypeCode.ShouldBeOfType<string>("Ownership type code should be of type string.");
-            _ = store.Market.ShouldBeOfType<string>("Market should be of type string.");
+            var store = storeContainer.Store;
+            store.ShouldNotBeNull("Store data should not be null.");
 
-            bool allFieldsValid = store.StoreNumber.HasValue &&
-                                  store.Id.HasValue &&
-                                  !string.IsNullOrWhiteSpace(store.Name) &&
-                                  !string.IsNullOrWhiteSpace(store.BrandName) &&
-                                  !string.IsNullOrWhiteSpace(store.PhoneNumber) &&
-                                  store.DistrictId.HasValue &&
-                                  !string.IsNullOrWhiteSpace(store.OwnershipTypeCode) &&
-                                  !string.IsNullOrWhiteSpace(store.Market);
-
-            if (!allFieldsValid)
+            // Validate operatingStatus
+            var operatingStatus = store.OperatingStatus;
+            operatingStatus.ShouldNotBeNull("Operating status should not be null.");
+            operatingStatus.Operating.ShouldBeOfType<bool>("Operating should be of type bool.");
+            operatingStatus.OpenDate.ShouldBeOfType<string>("Open date should be of type string.");
+            if (!string.IsNullOrWhiteSpace(operatingStatus.CloseDate))
             {
-                throw new Exception("One or more required fields are missing or empty in the response.");
+                operatingStatus.CloseDate.ShouldBeOfType<string>("Close date should be of type string.");
             }
+            operatingStatus.Status.ShouldBeOfType<string>("Status should be of type string.");
+
+            // Validate features
+            var features = store.Features;
+            features.ShouldNotBeNull("Features should not be null.");
+            foreach (var feature in features)
+            {
+                feature.Code.ShouldBeOfType<string>("Feature code should be of type string.");
+                feature.Name.ShouldBeOfType<string>("Feature name should be of type string.");
+                if (string.IsNullOrWhiteSpace(feature.Code) || string.IsNullOrWhiteSpace(feature.Name))
+                {
+                    throw new Exception("Feature code or name should not be empty.");
+                }
+            }
+
+            // Validate regularHours
+            var regularHours = store.RegularHours;
+            regularHours.ShouldNotBeNull("Regular hours should not be null.");
+            ValidateDays(regularHours);
+
+            // Validate hoursNext7Days
+            var hoursNext7Days = store.HoursNext7Days;
+            hoursNext7Days.ShouldNotBeNull("Hours next 7 days should not be null.");
+            foreach (var day in hoursNext7Days)
+            {
+                day.Open.ShouldBeOfType<bool>("Day open should be of type bool.");
+                day.Open24Hours.ShouldBeOfType<bool>("Day open24Hours should be of type bool.");
+                day.OpenTime.ShouldBeOfType<string>("Day openTime should be of type string.");
+                day.CloseTime.ShouldBeOfType<string>("Day closeTime should be of type string.");
+                day.Date.ShouldBeOfType<string>("Day date should be of type string.");
+                if (string.IsNullOrWhiteSpace(day.OpenTime) || string.IsNullOrWhiteSpace(day.CloseTime) || string.IsNullOrWhiteSpace(day.Date))
+                {
+                    throw new Exception("Day openTime, closeTime, or date should not be empty.");
+                }
+            }
+        }
+    }
+
+    private void ValidateDays(RegularHours regularHours)
+    {
+        ValidateDay(regularHours.Monday, "Monday");
+        ValidateDay(regularHours.Tuesday, "Tuesday");
+        ValidateDay(regularHours.Wednesday, "Wednesday");
+        ValidateDay(regularHours.Thursday, "Thursday");
+        ValidateDay(regularHours.Friday, "Friday");
+        ValidateDay(regularHours.Saturday, "Saturday");
+        ValidateDay(regularHours.Sunday, "Sunday");
+    }
+
+    private void ValidateDay(DayHours dayHours, string dayName)
+    {
+        dayHours.ShouldNotBeNull($"{dayName} hours should not be null.");
+        dayHours.Open.ShouldBeOfType<bool>($"{dayName} open should be of type bool.");
+        dayHours.Open24Hours.ShouldBeOfType<bool>($"{dayName} open24Hours should be of type bool.");
+        dayHours.OpenTime.ShouldBeOfType<string>($"{dayName} openTime should be of type string.");
+        dayHours.CloseTime.ShouldBeOfType<string>($"{dayName} closeTime should be of type string.");
+        if (string.IsNullOrWhiteSpace(dayHours.OpenTime) || string.IsNullOrWhiteSpace(dayHours.CloseTime))
+        {
+            throw new Exception($"{dayName} openTime or closeTime should not be empty.");
+        }
+    }
+
+
+    private void ValidateDays(dynamic days)
+    {
+        days.Monday.Open.ShouldBeOfType<bool>("Monday open should be of type bool.");
+        days.Monday.Open24Hours.ShouldBeOfType<bool>("Monday open24Hours should be of type bool.");
+        days.Monday.OpenTime.ShouldBeOfType<string>("Monday openTime should be of type string.");
+        days.Monday.CloseTime.ShouldBeOfType<string>("Monday closeTime should be of type string.");
+        if (string.IsNullOrWhiteSpace(days.Monday.OpenTime) || string.IsNullOrWhiteSpace(days.Monday.CloseTime))
+        {
+            throw new Exception("Monday openTime or closeTime should not be empty.");
+        }
+
+        days.Tuesday.Open.ShouldBeOfType<bool>("Tuesday open should be of type bool.");
+        days.Tuesday.Open24Hours.ShouldBeOfType<bool>("Tuesday open24Hours should be of type bool.");
+        days.Tuesday.OpenTime.ShouldBeOfType<string>("Tuesday openTime should be of type string.");
+        days.Tuesday.CloseTime.ShouldBeOfType<string>("Tuesday closeTime should be of type string.");
+        if (string.IsNullOrWhiteSpace(days.Tuesday.OpenTime) || string.IsNullOrWhiteSpace(days.Tuesday.CloseTime))
+        {
+            throw new Exception("Tuesday openTime or closeTime should not be empty.");
+        }
+
+        days.Wednesday.Open.ShouldBeOfType<bool>("Wednesday open should be of type bool.");
+        days.Wednesday.Open24Hours.ShouldBeOfType<bool>("Wednesday open24Hours should be of type bool.");
+        days.Wednesday.OpenTime.ShouldBeOfType<string>("Wednesday openTime should be of type string.");
+        days.Wednesday.CloseTime.ShouldBeOfType<string>("Wednesday closeTime should be of type string.");
+        if (string.IsNullOrWhiteSpace(days.Wednesday.OpenTime) || string.IsNullOrWhiteSpace(days.Wednesday.CloseTime))
+        {
+            throw new Exception("Wednesday openTime or closeTime should not be empty.");
+        }
+
+        days.Thursday.Open.ShouldBeOfType<bool>("Thursday open should be of type bool.");
+        days.Thursday.Open24Hours.ShouldBeOfType<bool>("Thursday open24Hours should be of type bool.");
+        days.Thursday.OpenTime.ShouldBeOfType<string>("Thursday openTime should be of type string.");
+        days.Thursday.CloseTime.ShouldBeOfType<string>("Thursday closeTime should be of type string.");
+        if (string.IsNullOrWhiteSpace(days.Thursday.OpenTime) || string.IsNullOrWhiteSpace(days.Thursday.CloseTime))
+        {
+            throw new Exception("Thursday openTime or closeTime should not be empty.");
+        }
+
+        days.Friday.Open.ShouldBeOfType<bool>("Friday open should be of type bool.");
+        days.Friday.Open24Hours.ShouldBeOfType<bool>("Friday open24Hours should be of type bool.");
+        days.Friday.OpenTime.ShouldBeOfType<string>("Friday openTime should be of type string.");
+        days.Friday.CloseTime.ShouldBeOfType<string>("Friday closeTime should be of type string.");
+        if (string.IsNullOrWhiteSpace(days.Friday.OpenTime) || string.IsNullOrWhiteSpace(days.Friday.CloseTime))
+        {
+            throw new Exception("Friday openTime or closeTime should not be empty.");
+        }
+
+        days.Saturday.Open.ShouldBeOfType<bool>("Saturday open should be of type bool.");
+        days.Saturday.Open24Hours.ShouldBeOfType<bool>("Saturday open24Hours should be of type bool.");
+        days.Saturday.OpenTime.ShouldBeOfType<string>("Saturday openTime should be of type string.");
+        days.Saturday.CloseTime.ShouldBeOfType<string>("Saturday closeTime should be of type string.");
+        if (string.IsNullOrWhiteSpace(days.Saturday.OpenTime) || string.IsNullOrWhiteSpace(days.Saturday.CloseTime))
+        {
+            throw new Exception("Saturday openTime or closeTime should not be empty.");
+        }
+
+        days.Sunday.Open.ShouldBeOfType<bool>("Sunday open should be of type bool.");
+        days.Sunday.Open24Hours.ShouldBeOfType<bool>("Sunday open24Hours should be of type bool.");
+        days.Sunday.OpenTime.ShouldBeOfType<string>("Sunday openTime should be of type string.");
+        days.Sunday.CloseTime.ShouldBeOfType<string>("Sunday closeTime should be of type string.");
+        if (string.IsNullOrWhiteSpace(days.Sunday.OpenTime) || string.IsNullOrWhiteSpace(days.Sunday.CloseTime))
+        {
+            throw new Exception("Sunday openTime or closeTime should not be empty.");
         }
     }
 
