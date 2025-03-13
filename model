@@ -8,8 +8,16 @@ namespace TestAutomation.ApiModel;
 
 public class NearbyStoresApiResponseModel
 {
-    [JsonProperty("stores")]
     public List<StoreContainer>? Stores { get; set; }
+    public PagingInfo? PagingInfo { get; set; } // Add this property to fix the error
+
+
+}
+
+public class PagingInfo
+{
+    public int Total { get; set; }
+    public int Limit { get; set; }
 }
 
 public class StoreContainer
@@ -33,7 +41,7 @@ public class Store
     public OperatingStatusBase? OperatingStatus { get; set; }
 
     [JsonProperty("hoursNext7Days")]
-    public List<HoursNext7DaysBase>? HoursNext7Days { get; set; }
+    public required List<HoursNext7DaysBase> HoursNext7Days { get; set; }
 
     [JsonProperty("regularHours")]
     public RegularHoursBase? RegularHours { get; set; }
