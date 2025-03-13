@@ -1,0 +1,365 @@
+using System.Text.Json;
+using Shouldly;
+using System.Net.Http.Headers;
+using System.Net;
+using TestAutomation.CommonUtilities;
+using TestAutomation.Helpers;
+using TestAutomation.ApiModel;
+using Serilog;
+using TestAutomation.TestRailUtil;
+using System.Collections.Concurrent;
+
+[TestClass]
+public class GetNearbyStores_SmokeTest
+{
+    public TestContext? TestContext { get; set; }
+    private static TestContext? classTestContext;
+    private static readonly int TestSuiteRunId = Global.TestSuiteRunId;
+    private static readonly ConcurrentDictionary<int, (string, int)> TestResultStore
+       = new();
+
+    [ClassInitialize]
+    public static void InitClass(TestContext context)
+    {
+        ConfigureLogger();
+        ExtentReportManager.StartReport();
+        classTestContext = context;
+        Log.Information($"ClassInitialize Start...... {classTestContext?.FullyQualifiedTestClassName}");
+    }
+
+    [TestInitialize]
+    public void TestSetup()
+    {
+        // Ensure each test gets a unique instance in a parallel run
+        ExtentReportManager.StartTest(TestContext?.TestName ?? "DefaultTestName");
+        Log.Information($"TestInitialize Start......{TestContext?.TestName}");
+        int testCaseId = TestRailTestCaseHelper.GetTestRailCaseId(TestContext!);
+        //Update Status as "Untested" before Test Run Start
+        TestResultStore[testCaseId] = ("Untested", 3);
+    }
+
+    [TestCleanup]
+    public void TestCleanup()
+    {
+        int statusId;
+
+        if (TestContext != null)
+        {
+            statusId = TestContext.CurrentTestOutcome == UnitTestOutcome.Passed ? 1 : 5;
+
+            int testCaseId = TestRailTestCaseHelper.GetTestRailCaseId(TestContext!);
+
+            // Fill only the Test Result Status value
+            UpdateTestResult(testCaseId, statusId: statusId, isResultString: false);
+
+            Log.Information($"Test Outcome: {TestContext.CurrentTestOutcome}");
+            Log.Information($"statusId : {statusId}");
+
+        }
+        else
+        {
+            Log.Warning("TestContext is null in TestCleanup.");
+        }
+
+
+    }
+
+
+    [ClassCleanup]
+    public static async Task Cleanup()
+    {
+        List<TestRailModel.TestResults> res = [];
+
+        try
+        {
+            foreach (KeyValuePair<int, (string, int)> kvp in TestResultStore)
+            {
+                int testCaseId = kvp.Key;
+                int testId = await GetTestIdAsync(testCaseId);
+                string comment = kvp.Value.Item1;
+                int statusId = kvp.Value.Item2;
+
+                Log.Information($"Test ID: {testCaseId}, Test Comment : {comment}, Test Result : {statusId}");
+
+                res.Add(new TestRailModel.TestResults
+                {
+                    Test_id = testId,
+                    Status_id = statusId,
+                    Comment = comment
+                });
+            }
+
+
+            //TestRail Status Update Switch
+            if (Global.TestRailSwitch.Trim().Equals("on", StringComparison.OrdinalIgnoreCase))
+            {
+                //Update Entire result at a time
+                await TestRailClient.UpdateTestResultsAsync(TestSuiteRunId, res);
+                Log.Information("TestRail Result Update done");
+            }
+            else
+            {
+                Log.Information($"TestRail Result Update Not Required Because TestRail Switch is :  {Global.TestRailSwitch}");
+            }
+
+
+        }
+        catch (Exception apiEx)
+        {
+            Log.Warning($"TestRail API Exception: {apiEx}");
+
+        }
+
+        Log.Information("Tests Completed. Cleaning up...");
+        Log.CloseAndFlush();
+        ExtentReportManager.EndReport();
+    }
+
+    /// <summary>
+    /// Test case to validate the API returns a list of stores near a specified latitude and longitude.
+    /// Includes pagination and validates the API response.
+    /// </summary>
+    [TestMethod]
+    [TestRailCase(137671499)]
+    [TestCategory("GetNearbyStore_Validation_With_LocationRange_Which_Are_Having_AnyStores")]
+    public async Task GetNearbyStore_Validation_With_LocationRange_Which_Are_Having_AnyStores()
+    {
+        using var cts = new CancellationTokenSource();
+        await ExecuteNearbyStoresTestAsync("40.7128,-74.0060", 25, 5, cts.Token,true);
+    }
+
+    [TestMethod]
+    [TestRailCase(137672673)]
+    [TestCategory("GetNearbyStore_Validation_With_LocationRange_Which_Are_Not_Having_AnyStores")]
+    public async Task GetNearbyStore_Validation_With_LocationRange_Which_Are_Not_Having_AnyStores()
+    {
+        using var cts = new CancellationTokenSource();
+
+        await ExecuteNearbyStoresTestAsync("-3.4653,-62.2159", 50, 10, cts.Token,false);
+
+
+    }
+    /// <summary>
+    /// Executes the test logic:
+    /// 1. Generates a JWT token and sets up request headers.
+    /// 2. Constructs the API URL dynamically using input parameters.
+    /// 3. Sends an API request and processes the response.
+    /// 4. Logs results and validates response details.
+    /// </summary>
+    private async Task ExecuteNearbyStoresTestAsync(string latlng, int radius, int limit, CancellationToken cancellationToken, bool expectedStore)
+    {
+        string appName = GlobalVariables.AppNameValue!; // Application name for token generation.
+        string baseUrl = $"{GlobalVariables.BaseUrl}"; // Base URL from global settings.
+
+        try
+        {
+            // Log test input data.
+            ExtentReportManager.Log($"Starting test with data: latlng={latlng}, radius={radius}, limit={limit}");
+
+            // Generate a JWT token for API authentication.
+            var jwtTokenCreator = new JwtTokenGenerator(appName);
+            string token = jwtTokenCreator.GenerateJwt();
+
+            // Get other necessary headers (Correlation ID, OAuth signature).
+            var acObj = new OauthTokenAndCorrelationId(appName);
+            string correlationId = acObj.CorrelationId;
+            string oauthSig = acObj.OauthSig;
+            string xApiKey = GlobalVariables.ClientId ?? throw new ArgumentNullException(nameof(GlobalVariables.ClientId), "Client ID cannot be null.");
+
+            // Construct the API URL with query parameters.
+            string url = $"{baseUrl}/v1/stores/nearby?" +
+                         $"latlng={latlng}" +
+                         $"&radius={radius}" +
+                         $"&limit={limit}" +
+                         "&Offset=0" +
+                         "&include=curbside.state" +
+                         "&servicetime=true" +
+                         "&locale=en" +
+                         "&xopstate=True" +
+                         "&brandcodes=sbux" +
+                         "&ownershiptypecodes=co" +
+                         "&roles=starbucks%20api%20-%20trusted" +
+                         "&usersubmarket=US";
+
+            ExtentReportManager.Log($"Constructed URL: {url}");
+
+            // Send the API request.
+            using (var request = new HttpRequestMessage(HttpMethod.Get, url))
+            using (var client = new HttpClient())
+            {
+                // Add necessary headers to the request.
+                AddHeaders(request, token, correlationId, xApiKey, oauthSig);
+
+                // Send the request and retrieve the response.
+                HttpResponseMessage response = await client.SendAsync(request, cancellationToken);
+
+                // Assert the status code is 200 OK using Shouldly.
+                response.StatusCode.ShouldBe(HttpStatusCode.OK, "Expected HTTP status code to be 200 OK.");
+
+                // Read the response body and ensure it is not empty.
+                string responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
+                responseBody.ShouldNotBeNullOrEmpty("Response body should not be null or empty.");
+
+                ExtentReportManager.Log($"Response Status: {response.StatusCode}");
+
+                // Process the response.
+                ProcessNearbyStoresResponse(responseBody, latlng,expectedStore, radius);
+                //Update Test Result in TestRail
+                int testCaseId = TestRailTestCaseHelper.GetTestRailCaseId(TestContext!);
+                UpdateTestResult(testCaseId, result: "Test Passed", isResultString: true);
+
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            ExtentReportManager.Log("Test execution canceled.");
+        }
+        catch (Exception ex)
+        {
+            //Update Test Result in TestRail
+            int testCaseId = TestRailTestCaseHelper.GetTestRailCaseId(TestContext!);
+            UpdateTestResult(testCaseId, result: $"Test Failed : {ex}", isResultString: true);
+
+            // Log any exceptions that occur during the test.
+            ExtentReportManager.Log($"Test failed: {ex.Message}");
+            ExtentReportManager.LogFail("Retrieve nearby store details failed.");
+            throw;
+        }
+    }
+
+   
+    /// <summary>
+    /// Adds the required headers to the HTTP request.
+    /// </summary>
+    private void AddHeaders(HttpRequestMessage request, string jwtToken, string correlationId, string xApiKey, string oauthSig)
+    {
+        // Authorization header with Bearer token.
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
+
+        // Custom headers required for the API.
+        request.Headers.Add("x-api-key", xApiKey);
+        request.Headers.Add("x-api-sig", oauthSig);
+        request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        request.Headers.Add("X-Correlation-Id", correlationId);
+    }
+
+    /// <summary>
+    /// Processes the API response:
+    /// 1. Validates the total and returned store counts.
+    /// 2. Logs details of the stores, including distances.
+    /// 3. Verifies that all stores are within the specified radius (if expected).
+    /// </summary>
+    private static void ProcessNearbyStoresResponse(string responseBody, string latlng, bool expectStores, int radius)
+    {
+        // Deserialize the JSON response into a strongly-typed model.
+        NearbyStoresApiResponseModel? response = JsonSerializer.Deserialize<NearbyStoresApiResponseModel>(responseBody);
+
+        // Fail if unable to deserialize response.
+        _ = response.ShouldNotBeNull("Failed to deserialize response.");
+
+        int totalStores = response?.PagingInfo?.Total ?? 0;
+        int returnedStores = response?.Stores?.Count ?? 0;
+
+        ExtentReportManager.Log($"Number of total stores: {totalStores}");
+        ExtentReportManager.Log($"Number of returned stores: {returnedStores}");
+
+        // If stores are expected, validate that at least one store is returned.
+        if (expectStores)
+        {
+            // Assert that there is at least one store returned.
+            returnedStores.ShouldBeGreaterThan(0, "Expected stores but none were found.");
+        }
+        else
+        {
+            // Assert that no stores are returned.
+            returnedStores.ShouldBe(0, "Expected no stores but some were found.");
+            ExtentReportManager.Log("Test passed: No stores returned as expected.");
+            return; // Exit early since there are no stores to process.
+        }
+
+        // Assert that the returned stores count does not exceed the limit.
+        returnedStores.ShouldBeLessThanOrEqualTo(response?.PagingInfo?.Limit ?? returnedStores, "Returned stores exceed the pagination limit.");
+
+        if (returnedStores > 0)
+        {
+            // Parse latitude and longitude from the input coordinates.
+            string[] coordinates = latlng.Split(',');
+            double latitude1 = Convert.ToDouble(coordinates[0]);
+            double longitude1 = Convert.ToDouble(coordinates[1]);
+
+            ExtentReportManager.Log("Processing returned stores:");
+            var list = (System.Collections.IList)(response?.Stores ?? []);
+            for (int i = 0; i < list.Count; i++)
+            {
+                var store = list[i] as RecommendedStoresModel.StoreContainer;
+                RecommendedStoresModel.StoreApiResponseModel? storeDetails = store?.Store;
+
+                if (storeDetails is null)
+                {
+                    continue;
+                }
+
+                string storeName = storeDetails?.Name ?? "Unknown Store";
+                double latitude2 = storeDetails?.Coordinates?.Latitude ?? 0;
+                double longitude2 = storeDetails?.Coordinates?.Longitude ?? 0;
+
+                ExtentReportManager.Log($"Store name: {storeName}");
+
+                // Calculate the distance from the input coordinates to the store.
+                double distanceInMiles = DistanceCalculator.CalculateDistance(latitude1, longitude1, latitude2, longitude2);
+
+                // Assert that the store is within the specified radius.
+                (distanceInMiles * 1609.344).ShouldBeLessThanOrEqualTo(radius * 1609.344,
+                    $"Store {storeName} is outside the specified radius. Distance: {distanceInMiles:F2} miles");
+
+                ExtentReportManager.Log($"Store: {storeName}, Distance: {distanceInMiles:F2} miles");
+            }
+        }
+    }
+
+    private static async Task<int> GetTestIdAsync(int testCaseId)
+    {
+        try
+        {
+            List<TestRailModel.TestCase> tests = await TestRailClient.GetTestCasesAsync(TestSuiteRunId).ConfigureAwait(false);
+            TestRailModel.TestCase? test = tests.Find(t => t.Case_id == testCaseId);
+            return test?.Id ?? 0;
+        }
+        catch (Exception ex)
+        {
+            Log.Warning($"Error fetching Test ID: {ex}");
+            return 0;
+        }
+    }
+
+    private static void UpdateTestResult(int testCaseId, string? result = null, int? statusId = null, bool isResultString = false) => TestResultStore.AddOrUpdate(testCaseId,
+            key => (result ?? "", statusId ?? 0), // Initial insert
+            (key, oldValue) =>
+                (isResultString ? result ?? oldValue.Item1 : oldValue.Item1,
+                 statusId ?? oldValue.Item2));
+
+    private static void ConfigureLogger()
+    {
+        // Enable Serilog debugging
+        Serilog.Debugging.SelfLog.Enable(Console.WriteLine);
+
+        string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+        string rootDir = Directory.GetParent(baseDir)?.Parent?.Parent?.Parent?.FullName ?? string.Empty;
+
+        // Set up log directory and file path
+        string logDirectory = Path.Combine(rootDir, "logs");
+        if (!Directory.Exists(logDirectory))
+        {
+            _ = Directory.CreateDirectory(logDirectory);
+        }
+
+        string logFilePath = Path.Combine(logDirectory, "test-log.txt");
+        Log.Logger = new LoggerConfiguration()
+            .WriteTo.File(logFilePath, rollingInterval: RollingInterval.Day, shared: true)
+            .CreateLogger();
+
+        Log.Information("Serilog configured successfully.");
+        Log.Information($"Logs will be written to: {logFilePath}");
+    }
+
+}
