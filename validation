@@ -1,0 +1,139 @@
+ public static async Task<HttpResponseMessage> GetNearbyStores_Response_Validation_CallAsync(string appName, CancellationToken cancelToken)
+ {
+     HttpResponseMessage response;
+     string baseUrl = $"{GlobalVariables.BaseUrl}";
+     string clientId = GlobalVariables.ClientId ?? throw new ArgumentNullException(nameof(GlobalVariables.ClientId), "Client ID cannot be null.");
+     string clientSecret = GlobalVariables.ClientSecret ?? throw new ArgumentNullException(nameof(GlobalVariables.ClientSecret), "Client Secret cannot be null.");
+     string username = GlobalVariables.UserName ?? throw new ArgumentNullException(nameof(GlobalVariables.UserName), "Username cannot be null.");
+     string password = GlobalVariables.Password ?? throw new ArgumentNullException(nameof(GlobalVariables.Password), "Password cannot be null.");
+
+     // Generate OAuth token for API authentication.
+     string token = await OAuthTokenGenerator.GetOAuthTokenAsync(baseUrl, clientId, clientSecret, username, password, cancelToken);
+
+     // Generating OauthToken and CorrelationId
+     var acObj = new OauthTokenAndCorrelationId(appName);
+     string correlationId = acObj.CorrelationId;
+     string oauthSig = acObj.OauthSig;
+     int limit = 50;
+     double Latitude = 45.49408;
+     double Longitude = -122.76729;
+
+     string url = $"{GlobalVariables.BaseUrl}{ApiEndpoints.GetNearbyStoresPathComponent}{limit}&latlng={Latitude},{Longitude}&roles=Starbucks API - Trusted";
+     string? xApiKey = GlobalVariables.ClientId;
+
+     HttpClient client = GetHttpClient(new Uri(baseUrl));
+     {
+         // Setup headers
+         client.DefaultRequestHeaders.Clear();
+         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+         client.DefaultRequestHeaders.Add("x-api-key", xApiKey);
+         client.DefaultRequestHeaders.Add("X-Correlation-Id", correlationId);
+         client.DefaultRequestHeaders.Add("x-api-sig", oauthSig);
+
+         // Setup the request
+         using (var request = new HttpRequestMessage(HttpMethod.Get, url))
+         {
+             // Make the API Request
+             response = await client.SendAsync(request, cancelToken);
+         }
+     }
+
+     return response;
+ }
+
+ private void ValidateResponseContent(string responseBody)
+ {
+     if (string.IsNullOrWhiteSpace(responseBody))
+     {
+         throw new ArgumentException("Response body should not be empty.");
+     }
+
+     ExtentReportManager.Log($"Response Body: {responseBody}");
+
+     NearbyStoresApiResponseModel? apiResponse = JsonConvert.DeserializeObject<NearbyStoresApiResponseModel>(responseBody);
+     if (apiResponse == null || apiResponse.Stores == null)
+     {
+         throw new Exception("Response data should not be null.");
+     }
+
+     foreach (StoreContainer storeContainer in apiResponse.Stores)
+     {
+         Store? store = storeContainer.Store;
+         _ = store.ShouldNotBeNull("Store data should not be null.");
+
+         ExtentReportManager.Log($"Store: {JsonConvert.SerializeObject(store)}");
+
+         ValidateOperatingStatus(store.OperatingStatus);
+         ValidateFeatures(store.Features ?? []);
+         ValidateHoursNext7Days(store.HoursNext7Days);
+         ValidateRegularHours(store.RegularHours);
+     }
+ }
+
+ private void ValidateOperatingStatus(OperatingStatusBase? operatingStatus)
+ {
+     _ = operatingStatus.ShouldNotBeNull("Operating status should not be null.");
+     _ = operatingStatus.Operating.ShouldBeOfType<bool>("Operating should be of type bool.");
+     _ = operatingStatus.Status.ShouldBeOfType<string>("Status should be of type string.");
+ }
+
+ private void ValidateFeatures(List<FeatureBase>? features)
+ {
+     _ = features.ShouldNotBeNull("Features should not be null.");
+     foreach (FeatureBase feature in features)
+     {
+         _ = feature.Code.ShouldBeOfType<string>("Feature code should be of type string.");
+         _ = feature.Name.ShouldBeOfType<string>("Feature name should be of type string.");
+         if (string.IsNullOrWhiteSpace(feature.Code) || string.IsNullOrWhiteSpace(feature.Name))
+         {
+             throw new Exception("Feature code or name should not be empty.");
+         }
+     }
+ }
+
+ private void ValidateHoursNext7Days(List<HoursNext7DaysBase>? hoursNext7Days)
+ {
+     ExtentReportManager.Log($"Validating HoursNext7Days: {JsonConvert.SerializeObject(hoursNext7Days)}");
+     _ = hoursNext7Days.ShouldNotBeNull("Hours next 7 days should not be null.");
+     foreach (HoursNext7DaysBase day in hoursNext7Days)
+     {
+         _ = day.Open.ShouldBeOfType<bool>("Day open should be of type bool.");
+         _ = day.Open24Hours.ShouldBeOfType<bool>("Day open24Hours should be of type bool.");
+         _ = day.OpenTime.ShouldBeOfType<string>("Day openTime should be of type string.");
+         _ = day.CloseTime.ShouldBeOfType<string>("Day closeTime should be of type string.");
+         _ = day.Date.ShouldBeOfType<string>("Day date should be of type string.");
+         if (string.IsNullOrWhiteSpace(day.OpenTime) || string.IsNullOrWhiteSpace(day.CloseTime) || string.IsNullOrWhiteSpace(day.Date))
+         {
+             throw new Exception("Day openTime, closeTime, or date should not be empty.");
+         }
+     }
+ }
+
+ private void ValidateRegularHours(RegularHoursBase? regularHours)
+ {
+     _ = regularHours.ShouldNotBeNull("Regular hours should not be null.");
+     ValidateDay(regularHours.Monday, "Monday");
+     ValidateDay(regularHours.Tuesday, "Tuesday");
+     ValidateDay(regularHours.Wednesday, "Wednesday");
+     ValidateDay(regularHours.Thursday, "Thursday");
+     ValidateDay(regularHours.Friday, "Friday");
+     ValidateDay(regularHours.Saturday, "Saturday");
+     ValidateDay(regularHours.Sunday, "Sunday");
+ }
+
+ private void ValidateDay(DayHours? dayHours, string dayName)
+ {
+     if (dayHours == null)
+     {
+         throw new Exception($"{dayName} hours should not be null.");
+     }
+     _ = dayHours.Open.ShouldBeOfType<bool>($"{dayName} open should be of type bool.");
+     _ = dayHours.Open24Hours.ShouldBeOfType<bool>($"{dayName} open24Hours should be of type bool.");
+     _ = dayHours.OpenTime.ShouldBeOfType<string>($"{dayName} openTime should be of type string.");
+     _ = dayHours.CloseTime.ShouldBeOfType<string>($"{dayName} closeTime should be of type string.");
+     if (string.IsNullOrWhiteSpace(dayHours.OpenTime) || string.IsNullOrWhiteSpace(dayHours.CloseTime))
+     {
+         throw new Exception($"{dayName} openTime or closeTime should not be empty.");
+     }
+ }
