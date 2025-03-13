@@ -1,49 +1,50 @@
 using System.Text.Json.Serialization;
-using Newtonsoft.Json;
 
 namespace TestAutomation.ApiModel;
 
-// Model for NearbyStores Response Deserialization
-
-
+// Model for NearbyStores API Response Deserialization
 public class NearbyStoresApiResponseModel
 {
+    [JsonPropertyName("stores")]
     public List<StoreContainer>? Stores { get; set; }
-    public PagingInfo? PagingInfo { get; set; } // Add this property to fix the error
 
-
+    [JsonPropertyName("pagingInfo")]
+    public PagingInfo? PagingInfo { get; set; }
 }
 
 public class PagingInfo
 {
+    [JsonPropertyName("total")]
     public int Total { get; set; }
+
+    [JsonPropertyName("limit")]
     public int Limit { get; set; }
 }
 
 public class StoreContainer
 {
-    [JsonProperty("store")]
+    [JsonPropertyName("store")]
     public Store? Store { get; set; }
 }
 
 public class Store
 {
-    [JsonProperty("name")]
+    [JsonPropertyName("name")]
     public string? Name { get; set; }
 
-    [JsonProperty("storeNumber")]
+    [JsonPropertyName("storeNumber")]
     public string? StoreNumber { get; set; }
 
-    [JsonProperty("features")]
+    [JsonPropertyName("features")]
     public List<FeatureBase>? Features { get; set; }
 
-    [JsonProperty("operatingStatus")]
+    [JsonPropertyName("operatingStatus")]
     public OperatingStatusBase? OperatingStatus { get; set; }
 
-    [JsonProperty("hoursNext7Days")]
-    public required List<HoursNext7DaysBase> HoursNext7Days { get; set; }
+    [JsonPropertyName("hoursNext7Days")]
+    public List<HoursNext7DaysBase>? HoursNext7Days { get; set; }
 
-    [JsonProperty("regularHours")]
+    [JsonPropertyName("regularHours")]
     public RegularHoursBase? RegularHours { get; set; }
 }
 
@@ -126,7 +127,7 @@ public class HoursNext7DaysBase
 
     [JsonPropertyName("closeTime")]
     public string? CloseTime { get; set; }
-    
+
     [JsonPropertyName("date")]
     public string? Date { get; set; }
 
