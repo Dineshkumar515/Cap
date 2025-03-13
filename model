@@ -1,0 +1,127 @@
+using System.Text.Json.Serialization;
+using Newtonsoft.Json;
+
+namespace TestAutomation.ApiModel;
+
+// Model for NearbyStores Response Deserialization
+
+
+public class NearbyStoresApiResponseModel
+{
+    [JsonProperty("stores")]
+    public List<StoreContainer>? Stores { get; set; }
+}
+
+public class StoreContainer
+{
+    [JsonProperty("store")]
+    public Store? Store { get; set; }
+}
+
+public class Store
+{
+    [JsonProperty("name")]
+    public string? Name { get; set; }
+
+    [JsonProperty("storeNumber")]
+    public string? StoreNumber { get; set; }
+
+    [JsonProperty("features")]
+    public List<FeatureBase>? Features { get; set; }
+
+    [JsonProperty("operatingStatus")]
+    public OperatingStatusBase? OperatingStatus { get; set; }
+
+    [JsonProperty("hoursNext7Days")]
+    public List<HoursNext7DaysBase>? HoursNext7Days { get; set; }
+
+    [JsonProperty("regularHours")]
+    public RegularHoursBase? RegularHours { get; set; }
+}
+
+public class OperatingStatusBase
+{
+    [JsonPropertyName("operating")]
+    public bool Operating { get; set; }
+
+    [JsonPropertyName("openDate")]
+    public string? OpenDate { get; set; }
+
+    [JsonPropertyName("closeDate")]
+    public string? CloseDate { get; set; }
+
+    [JsonPropertyName("status")]
+    public string? Status { get; set; }
+}
+
+public class FeatureBase
+{
+    [JsonPropertyName("code")]
+    public string? Code { get; set; }
+
+    [JsonPropertyName("name")]
+    public string? Name { get; set; }
+}
+
+public class RegularHoursBase
+{
+    [JsonPropertyName("monday")]
+    public DayHours? Monday { get; set; }
+
+    [JsonPropertyName("tuesday")]
+    public DayHours? Tuesday { get; set; }
+
+    [JsonPropertyName("wednesday")]
+    public DayHours? Wednesday { get; set; }
+
+    [JsonPropertyName("thursday")]
+    public DayHours? Thursday { get; set; }
+
+    [JsonPropertyName("friday")]
+    public DayHours? Friday { get; set; }
+
+    [JsonPropertyName("saturday")]
+    public DayHours? Saturday { get; set; }
+
+    [JsonPropertyName("sunday")]
+    public DayHours? Sunday { get; set; }
+
+    [JsonPropertyName("open24x7")]
+    public bool Open24x7 { get; set; }
+}
+
+public class DayHours
+{
+    [JsonPropertyName("open")]
+    public bool Open { get; set; }
+
+    [JsonPropertyName("open24Hours")]
+    public bool Open24Hours { get; set; }
+
+    [JsonPropertyName("openTime")]
+    public string? OpenTime { get; set; }
+
+    [JsonPropertyName("closeTime")]
+    public string? CloseTime { get; set; }
+}
+
+public class HoursNext7DaysBase
+{
+    [JsonPropertyName("open")]
+    public bool Open { get; set; }
+
+    [JsonPropertyName("open24Hours")]
+    public bool Open24Hours { get; set; }
+
+    [JsonPropertyName("openTime")]
+    public string? OpenTime { get; set; }
+
+    [JsonPropertyName("closeTime")]
+    public string? CloseTime { get; set; }
+    
+    [JsonPropertyName("date")]
+    public string? Date { get; set; }
+
+    [JsonPropertyName("holidayCode")]
+    public string? HolidayCode { get; set; }
+}
