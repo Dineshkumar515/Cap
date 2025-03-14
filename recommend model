@@ -1,0 +1,64 @@
+using System.Text.Json.Serialization;
+namespace TestAutomation.ApiModel;
+
+public class RecommendedStoresModel
+{
+    // Model for RecommendedStores Response Deserialization
+    public class RecommendedStoresApiResponseModel
+    {
+        [JsonPropertyName("paging")]
+        public PagingApiResponseModel? Paging { get; set; }
+
+        [JsonPropertyName("stores")]
+        public List<StoreContainerApiResponseModel>? Stores { get; set; }
+    }
+
+
+    // Model for Paging Response Deserialization
+    public class PagingApiResponseModel
+    {
+        [JsonPropertyName("total")]
+        public int Total { get; set; }
+    }
+
+    public record PagingValueApiResponseModel(
+        [property: JsonPropertyName("total")] int Total,
+        [property: JsonPropertyName("limit")] int Limit);
+
+
+    // Model for Store Response Deserialization
+    public class StoreApiResponseModel
+    {
+        [JsonPropertyName("name")]
+        public string? Name { get; set; }
+
+        [JsonPropertyName("coordinates")]
+        public CoordinatesApiResponseModel? Coordinates { get; set; }
+    }
+
+    public class StoreContainer
+    {
+        [JsonPropertyName("store")]
+        public StoreApiResponseModel? Store { get; set; }
+    }
+
+    // Model for Store Container Response Deserialization
+    public class StoreContainerApiResponseModel
+    {
+        [JsonPropertyName("store")]
+        public StoreApiResponseModel? Store { get; set; }
+
+    }
+
+    // Model for Coordinates Response Deserialization
+    public class CoordinatesApiResponseModel
+{
+    [JsonPropertyName("latitude")]
+    public double Latitude { get; set; }
+
+    [JsonPropertyName("longitude")]
+    public double Longitude { get; set; }
+
+    }
+
+}
