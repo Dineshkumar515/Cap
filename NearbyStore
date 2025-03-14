@@ -12,6 +12,7 @@ using System.Collections.Concurrent;
 [TestClass]
 public class GetNearbyStores_SmokeTest
 {
+    private static readonly HttpClient HttpClient = new();
     public TestContext? TestContext { get; set; }
     private static TestContext? classTestContext;
     private static readonly int TestSuiteRunId = Global.TestSuiteRunId;
@@ -185,13 +186,12 @@ public class GetNearbyStores_SmokeTest
 
             // Send the API request.
             using (var request = new HttpRequestMessage(HttpMethod.Get, url))
-            using (var client = new HttpClient())
             {
                 // Add necessary headers to the request.
                 AddHeaders(request, token, correlationId, xApiKey, oauthSig);
 
                 // Send the request and retrieve the response.
-                HttpResponseMessage response = await client.SendAsync(request, cancellationToken);
+                HttpResponseMessage response = await HttpClient.SendAsync(request, cancellationToken);
 
                 // Assert the status code is 200 OK using Shouldly.
                 response.StatusCode.ShouldBe(HttpStatusCode.OK, "Expected HTTP status code to be 200 OK.");
@@ -257,7 +257,7 @@ public class GetNearbyStores_SmokeTest
         // Fail if unable to deserialize response.
         _ = response.ShouldNotBeNull("Failed to deserialize response.");
 
-        int totalStores = response?.PagingInfo?.Total ?? 0;
+        int totalStores = response?.Paging?.Total ?? 0;
         int returnedStores = response?.Stores?.Count ?? 0;
 
         ExtentReportManager.Log($"Number of total stores: {totalStores}");
@@ -278,7 +278,7 @@ public class GetNearbyStores_SmokeTest
         }
 
         // Assert that the returned stores count does not exceed the limit.
-        returnedStores.ShouldBeLessThanOrEqualTo(response?.PagingInfo?.Limit ?? returnedStores, "Returned stores exceed the pagination limit.");
+        returnedStores.ShouldBeLessThanOrEqualTo(response?.Paging?.Limit ?? returnedStores, "Returned stores exceed the pagination limit.");
 
         if (returnedStores > 0)
         {
@@ -291,8 +291,7 @@ public class GetNearbyStores_SmokeTest
             var list = (System.Collections.IList)(response?.Stores ?? []);
             for (int i = 0; i < list.Count; i++)
             {
-                var store = list[i] as RecommendedStoresModel.StoreContainer;
-                RecommendedStoresModel.StoreApiResponseModel? storeDetails = store?.Store;
+                RecommendedStoresModel.StoreApiResponseModel? storeDetails = store.Store;
 
                 if (storeDetails is null)
                 {
@@ -362,4 +361,15 @@ public class GetNearbyStores_SmokeTest
         Log.Information($"Logs will be written to: {logFilePath}");
     }
 
+}
+public class NearbyStoresApiResponseModel
+{
+    public List<StoreContainer>? Stores { get; set; }
+    public PagingInfo? Paging { get; set; } // Add this property to fix the error
+}
+
+public class PagingInfo
+{
+    public int Total { get; set; }
+    public int Limit { get; set; }
 }
