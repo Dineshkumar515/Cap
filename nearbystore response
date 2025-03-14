@@ -1,0 +1,986 @@
+{
+    "paging": {
+        "total": 445,
+        "offset": 0,
+        "limit": 5,
+        "returned": 5
+    },
+    "stores": [
+        {
+            "distance": 0.0873,
+            "store": {
+                "id": "12020",
+                "name": "Park Row at Beekman St",
+                "brandName": "Starbucks",
+                "storeNumber": "849-2059",
+                "phoneNumber": "2126088073",
+                "districtId": 2214,
+                "ownershipTypeCode": "CO",
+                "market": "US",
+                "operatingStatus": {
+                    "operating": true,
+                    "openDate": "10/1/1995 12:00:00 AM",
+                    "closeDate": null,
+                    "status": "ACTIVE"
+                },
+                "address": {
+                    "streetAddressLine1": "38 Park Row",
+                    "streetAddressLine2": null,
+                    "streetAddressLine3": "#4",
+                    "city": "New York",
+                    "countrySubdivisionCode": "NY",
+                    "countryCode": "US",
+                    "postalCode": "100381551",
+                    "countyCode": "New York"
+                },
+                "coordinates": {
+                    "latitude": 40.71164,
+                    "longitude": -74.00666
+                },
+                "features": [
+                    {
+                        "code": "CS",
+                        "name": "Café Seating"
+                    },
+                    {
+                        "code": "DR",
+                        "name": "Redeem Rewards"
+                    },
+                    {
+                        "code": "GO",
+                        "name": "Starbucks Wi-Fi"
+                    },
+                    {
+                        "code": "SE",
+                        "name": "Mobile Multi Tender"
+                    },
+                    {
+                        "code": "NB",
+                        "name": "Nitro Brew"
+                    },
+                    {
+                        "code": "WA",
+                        "name": "Oven - Warmed Food"
+                    },
+                    {
+                        "code": "16",
+                        "name": "In Store"
+                    },
+                    {
+                        "code": "XO",
+                        "name": "Mobile Order and Pay"
+                    }
+                ],
+                "regulations": [
+                    {
+                        "code": "taxForOutOfStoreConsumption"
+                    },
+                    {
+                        "code": "allowGuestCheckout"
+                    }
+                ],
+                "timeZoneInfo": {
+                    "currentTimeOffset": -240,
+                    "windowsTimeZoneId": "Eastern Standard Time",
+                    "olsonTimeZoneId": "GMT-05:00 America/New_York"
+                },
+                "regularHours": {
+                    "monday": {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:00:00",
+                        "closeTime": "20:00:00"
+                    },
+                    "tuesday": {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:00:00",
+                        "closeTime": "20:00:00"
+                    },
+                    "wednesday": {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:00:00",
+                        "closeTime": "20:00:00"
+                    },
+                    "thursday": {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:00:00",
+                        "closeTime": "20:00:00"
+                    },
+                    "friday": {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:00:00",
+                        "closeTime": "20:00:00"
+                    },
+                    "saturday": {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:30:00",
+                        "closeTime": "20:00:00"
+                    },
+                    "sunday": {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:30:00",
+                        "closeTime": "20:00:00"
+                    },
+                    "open24x7": false
+                },
+                "extendedHours": [],
+                "hoursNext7Days": [
+                    {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:00:00",
+                        "closeTime": "20:00:00",
+                        "date": "2025-03-14T00:00:00.0000000",
+                        "holidayCode": null
+                    },
+                    {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:30:00",
+                        "closeTime": "20:00:00",
+                        "date": "2025-03-15T00:00:00.0000000",
+                        "holidayCode": null
+                    },
+                    {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:30:00",
+                        "closeTime": "20:00:00",
+                        "date": "2025-03-16T00:00:00.0000000",
+                        "holidayCode": null
+                    },
+                    {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:00:00",
+                        "closeTime": "20:00:00",
+                        "date": "2025-03-17T00:00:00.0000000",
+                        "holidayCode": null
+                    },
+                    {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:00:00",
+                        "closeTime": "20:00:00",
+                        "date": "2025-03-18T00:00:00.0000000",
+                        "holidayCode": null
+                    },
+                    {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:00:00",
+                        "closeTime": "20:00:00",
+                        "date": "2025-03-19T00:00:00.0000000",
+                        "holidayCode": null
+                    },
+                    {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:00:00",
+                        "closeTime": "20:00:00",
+                        "date": "2025-03-20T00:00:00.0000000",
+                        "holidayCode": null
+                    }
+                ],
+                "today": {
+                    "open": true,
+                    "open24Hours": false,
+                    "openTime": "05:00:00",
+                    "closeTime": "20:00:00",
+                    "localTime": "2025-03-14T09:20:46.0205827",
+                    "openAsOfLocalTime": true,
+                    "opensIn": null,
+                    "closesIn": "10:39:13"
+                },
+                "serviceTime": {
+                    "minimumWait": 2,
+                    "maximumWait": 5,
+                    "lineLength": 0
+                },
+                "xopState": "temporarilyOffline",
+                "currency": "USD",
+                "sdState": null,
+                "curbside": {
+                    "state": "notSupported"
+                },
+                "accessType": "Public",
+                "guestCheckoutUrls": [
+                    {
+                        "key": "Apple",
+                        "url": "https://www.starbucks.com/menu/ordering/maps/apple/store/849"
+                    },
+                    {
+                        "key": "Google",
+                        "url": "https://starbucks.app.link/hhgcKX7Z1Jb?storeNumber=849&%24deeplink_path=order%3FstoreNumber%3D849"
+                    }
+                ],
+                "legalEntityCode": "100",
+                "licenseeStore": null
+            }
+        },
+        {
+            "distance": 0.1417,
+            "store": {
+                "id": "18526",
+                "name": "Broadway & Reade",
+                "brandName": "Starbucks",
+                "storeNumber": "7566-13122",
+                "phoneNumber": "2124065315",
+                "districtId": 1050,
+                "ownershipTypeCode": "CO",
+                "market": "US",
+                "operatingStatus": {
+                    "operating": true,
+                    "openDate": "7/19/2000 12:00:00 AM",
+                    "closeDate": null,
+                    "status": "ACTIVE"
+                },
+                "address": {
+                    "streetAddressLine1": "291 Broadway",
+                    "streetAddressLine2": null,
+                    "streetAddressLine3": null,
+                    "city": "New York",
+                    "countrySubdivisionCode": "NY",
+                    "countryCode": "US",
+                    "postalCode": "100071814",
+                    "countyCode": "New York"
+                },
+                "coordinates": {
+                    "latitude": 40.71485,
+                    "longitude": -74.00593
+                },
+                "features": [
+                    {
+                        "code": "DR",
+                        "name": "Redeem Rewards"
+                    },
+                    {
+                        "code": "GO",
+                        "name": "Starbucks Wi-Fi"
+                    },
+                    {
+                        "code": "SE",
+                        "name": "Mobile Multi Tender"
+                    },
+                    {
+                        "code": "NB",
+                        "name": "Nitro Brew"
+                    },
+                    {
+                        "code": "WA",
+                        "name": "Oven - Warmed Food"
+                    },
+                    {
+                        "code": "16",
+                        "name": "In Store"
+                    },
+                    {
+                        "code": "XO",
+                        "name": "Mobile Order and Pay"
+                    }
+                ],
+                "regulations": [
+                    {
+                        "code": "taxForOutOfStoreConsumption"
+                    },
+                    {
+                        "code": "allowGuestCheckout"
+                    }
+                ],
+                "timeZoneInfo": {
+                    "currentTimeOffset": -240,
+                    "windowsTimeZoneId": "Eastern Standard Time",
+                    "olsonTimeZoneId": "GMT-05:00 America/New_York"
+                },
+                "regularHours": null,
+                "extendedHours": [],
+                "hoursNext7Days": null,
+                "today": null,
+                "serviceTime": {
+                    "minimumWait": 2,
+                    "maximumWait": 5,
+                    "lineLength": 0
+                },
+                "xopState": "closed",
+                "currency": "USD",
+                "sdState": null,
+                "curbside": {
+                    "state": "notSupported"
+                },
+                "accessType": "Public",
+                "guestCheckoutUrls": [
+                    {
+                        "key": "Apple",
+                        "url": "https://www.starbucks.com/menu/ordering/maps/apple/store/7566"
+                    },
+                    {
+                        "key": "Google",
+                        "url": "https://starbucks.app.link/hhgcKX7Z1Jb?storeNumber=7566&%24deeplink_path=order%3FstoreNumber%3D7566"
+                    }
+                ],
+                "legalEntityCode": "100",
+                "licenseeStore": null
+            }
+        },
+        {
+            "distance": 0.1769,
+            "store": {
+                "id": "11040",
+                "name": "Church Street & Murray",
+                "brandName": "Starbucks",
+                "storeNumber": "14841-127064",
+                "phoneNumber": "2125131451",
+                "districtId": 2214,
+                "ownershipTypeCode": "CO",
+                "market": "US",
+                "operatingStatus": {
+                    "operating": true,
+                    "openDate": "2/28/2009 12:00:00 AM",
+                    "closeDate": null,
+                    "status": "ACTIVE"
+                },
+                "address": {
+                    "streetAddressLine1": "120 Church St",
+                    "streetAddressLine2": null,
+                    "streetAddressLine3": null,
+                    "city": "New York",
+                    "countrySubdivisionCode": "NY",
+                    "countryCode": "US",
+                    "postalCode": "100072402",
+                    "countyCode": "New York"
+                },
+                "coordinates": {
+                    "latitude": 40.71378,
+                    "longitude": -74.00912
+                },
+                "features": [
+                    {
+                        "code": "CS",
+                        "name": "Café Seating"
+                    },
+                    {
+                        "code": "DR",
+                        "name": "Redeem Rewards"
+                    },
+                    {
+                        "code": "GO",
+                        "name": "Starbucks Wi-Fi"
+                    },
+                    {
+                        "code": "SE",
+                        "name": "Mobile Multi Tender"
+                    },
+                    {
+                        "code": "NB",
+                        "name": "Nitro Brew"
+                    },
+                    {
+                        "code": "WA",
+                        "name": "Oven - Warmed Food"
+                    },
+                    {
+                        "code": "16",
+                        "name": "In Store"
+                    },
+                    {
+                        "code": "XO",
+                        "name": "Mobile Order and Pay"
+                    }
+                ],
+                "regulations": [
+                    {
+                        "code": "taxForOutOfStoreConsumption"
+                    },
+                    {
+                        "code": "allowGuestCheckout"
+                    }
+                ],
+                "timeZoneInfo": {
+                    "currentTimeOffset": -240,
+                    "windowsTimeZoneId": "Eastern Standard Time",
+                    "olsonTimeZoneId": "GMT+00:00 America/New_York"
+                },
+                "regularHours": {
+                    "monday": {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:30:00",
+                        "closeTime": "20:00:00"
+                    },
+                    "tuesday": {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:30:00",
+                        "closeTime": "20:00:00"
+                    },
+                    "wednesday": {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:30:00",
+                        "closeTime": "20:00:00"
+                    },
+                    "thursday": {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:30:00",
+                        "closeTime": "20:00:00"
+                    },
+                    "friday": {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:30:00",
+                        "closeTime": "20:00:00"
+                    },
+                    "saturday": {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:30:00",
+                        "closeTime": "20:00:00"
+                    },
+                    "sunday": {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:30:00",
+                        "closeTime": "20:00:00"
+                    },
+                    "open24x7": false
+                },
+                "extendedHours": [],
+                "hoursNext7Days": [
+                    {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:30:00",
+                        "closeTime": "20:00:00",
+                        "date": "2025-03-14T00:00:00.0000000",
+                        "holidayCode": null
+                    },
+                    {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:30:00",
+                        "closeTime": "20:00:00",
+                        "date": "2025-03-15T00:00:00.0000000",
+                        "holidayCode": null
+                    },
+                    {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:30:00",
+                        "closeTime": "20:00:00",
+                        "date": "2025-03-16T00:00:00.0000000",
+                        "holidayCode": null
+                    },
+                    {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:30:00",
+                        "closeTime": "20:00:00",
+                        "date": "2025-03-17T00:00:00.0000000",
+                        "holidayCode": null
+                    },
+                    {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:30:00",
+                        "closeTime": "20:00:00",
+                        "date": "2025-03-18T00:00:00.0000000",
+                        "holidayCode": null
+                    },
+                    {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:30:00",
+                        "closeTime": "20:00:00",
+                        "date": "2025-03-19T00:00:00.0000000",
+                        "holidayCode": null
+                    },
+                    {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:30:00",
+                        "closeTime": "20:00:00",
+                        "date": "2025-03-20T00:00:00.0000000",
+                        "holidayCode": null
+                    }
+                ],
+                "today": {
+                    "open": true,
+                    "open24Hours": false,
+                    "openTime": "05:30:00",
+                    "closeTime": "20:00:00",
+                    "localTime": "2025-03-14T09:20:46.0205827",
+                    "openAsOfLocalTime": true,
+                    "opensIn": null,
+                    "closesIn": "10:39:13"
+                },
+                "serviceTime": {
+                    "minimumWait": 2,
+                    "maximumWait": 5,
+                    "lineLength": 0
+                },
+                "xopState": "temporarilyOffline",
+                "currency": "USD",
+                "sdState": null,
+                "curbside": {
+                    "state": "notSupported"
+                },
+                "accessType": "Public",
+                "guestCheckoutUrls": [
+                    {
+                        "key": "Apple",
+                        "url": "https://www.starbucks.com/menu/ordering/maps/apple/store/14841"
+                    },
+                    {
+                        "key": "Google",
+                        "url": "https://starbucks.app.link/hhgcKX7Z1Jb?storeNumber=14841&%24deeplink_path=order%3FstoreNumber%3D14841"
+                    }
+                ],
+                "legalEntityCode": "100",
+                "licenseeStore": null
+            }
+        },
+        {
+            "distance": 0.2079,
+            "store": {
+                "id": "10655",
+                "name": "Nassau & Fulton",
+                "brandName": "Starbucks",
+                "storeNumber": "14318-119964",
+                "phoneNumber": "2129620439",
+                "districtId": 2214,
+                "ownershipTypeCode": "CO",
+                "market": "US",
+                "operatingStatus": {
+                    "operating": true,
+                    "openDate": "9/29/2008 12:00:00 AM",
+                    "closeDate": null,
+                    "status": "ACTIVE"
+                },
+                "address": {
+                    "streetAddressLine1": "130 Fulton St",
+                    "streetAddressLine2": null,
+                    "streetAddressLine3": null,
+                    "city": "New York",
+                    "countrySubdivisionCode": "NY",
+                    "countryCode": "US",
+                    "postalCode": "100382504",
+                    "countyCode": "New York"
+                },
+                "coordinates": {
+                    "latitude": 40.71017,
+                    "longitude": -74.00793
+                },
+                "features": [
+                    {
+                        "code": "CS",
+                        "name": "Café Seating"
+                    },
+                    {
+                        "code": "DR",
+                        "name": "Redeem Rewards"
+                    },
+                    {
+                        "code": "GO",
+                        "name": "Starbucks Wi-Fi"
+                    },
+                    {
+                        "code": "SE",
+                        "name": "Mobile Multi Tender"
+                    },
+                    {
+                        "code": "NB",
+                        "name": "Nitro Brew"
+                    },
+                    {
+                        "code": "WA",
+                        "name": "Oven - Warmed Food"
+                    },
+                    {
+                        "code": "16",
+                        "name": "In Store"
+                    },
+                    {
+                        "code": "XO",
+                        "name": "Mobile Order and Pay"
+                    }
+                ],
+                "regulations": [
+                    {
+                        "code": "taxForOutOfStoreConsumption"
+                    },
+                    {
+                        "code": "allowGuestCheckout"
+                    }
+                ],
+                "timeZoneInfo": {
+                    "currentTimeOffset": -240,
+                    "windowsTimeZoneId": "Eastern Standard Time",
+                    "olsonTimeZoneId": "GMT+00:00 America/New_York"
+                },
+                "regularHours": {
+                    "monday": {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "06:00:00",
+                        "closeTime": "19:00:00"
+                    },
+                    "tuesday": {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "06:00:00",
+                        "closeTime": "19:00:00"
+                    },
+                    "wednesday": {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "06:00:00",
+                        "closeTime": "19:00:00"
+                    },
+                    "thursday": {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "06:00:00",
+                        "closeTime": "19:00:00"
+                    },
+                    "friday": {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "06:00:00",
+                        "closeTime": "19:00:00"
+                    },
+                    "saturday": {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "07:00:00",
+                        "closeTime": "19:00:00"
+                    },
+                    "sunday": {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "07:00:00",
+                        "closeTime": "18:00:00"
+                    },
+                    "open24x7": false
+                },
+                "extendedHours": [],
+                "hoursNext7Days": [
+                    {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "06:00:00",
+                        "closeTime": "19:00:00",
+                        "date": "2025-03-14T00:00:00.0000000",
+                        "holidayCode": null
+                    },
+                    {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "07:00:00",
+                        "closeTime": "19:00:00",
+                        "date": "2025-03-15T00:00:00.0000000",
+                        "holidayCode": null
+                    },
+                    {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "07:00:00",
+                        "closeTime": "18:00:00",
+                        "date": "2025-03-16T00:00:00.0000000",
+                        "holidayCode": null
+                    },
+                    {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "06:00:00",
+                        "closeTime": "19:00:00",
+                        "date": "2025-03-17T00:00:00.0000000",
+                        "holidayCode": null
+                    },
+                    {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "06:00:00",
+                        "closeTime": "19:00:00",
+                        "date": "2025-03-18T00:00:00.0000000",
+                        "holidayCode": null
+                    },
+                    {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "06:00:00",
+                        "closeTime": "19:00:00",
+                        "date": "2025-03-19T00:00:00.0000000",
+                        "holidayCode": null
+                    },
+                    {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "06:00:00",
+                        "closeTime": "19:00:00",
+                        "date": "2025-03-20T00:00:00.0000000",
+                        "holidayCode": null
+                    }
+                ],
+                "today": {
+                    "open": true,
+                    "open24Hours": false,
+                    "openTime": "06:00:00",
+                    "closeTime": "19:00:00",
+                    "localTime": "2025-03-14T09:20:46.0205827",
+                    "openAsOfLocalTime": true,
+                    "opensIn": null,
+                    "closesIn": "9:39:13"
+                },
+                "serviceTime": {
+                    "minimumWait": 2,
+                    "maximumWait": 5,
+                    "lineLength": 0
+                },
+                "xopState": "temporarilyOffline",
+                "currency": "USD",
+                "sdState": null,
+                "curbside": {
+                    "state": "notSupported"
+                },
+                "accessType": "Public",
+                "guestCheckoutUrls": [
+                    {
+                        "key": "Apple",
+                        "url": "https://www.starbucks.com/menu/ordering/maps/apple/store/14318"
+                    },
+                    {
+                        "key": "Google",
+                        "url": "https://starbucks.app.link/hhgcKX7Z1Jb?storeNumber=14318&%24deeplink_path=order%3FstoreNumber%3D14318"
+                    }
+                ],
+                "legalEntityCode": "100",
+                "licenseeStore": null
+            }
+        },
+        {
+            "distance": 0.2465,
+            "store": {
+                "id": "8692",
+                "name": "Chambers and West Broadway",
+                "brandName": "Starbucks",
+                "storeNumber": "7466-6651",
+                "phoneNumber": "2127916368",
+                "districtId": 2214,
+                "ownershipTypeCode": "CO",
+                "market": "US",
+                "operatingStatus": {
+                    "operating": true,
+                    "openDate": "9/25/1999 12:00:00 AM",
+                    "closeDate": null,
+                    "status": "ACTIVE"
+                },
+                "address": {
+                    "streetAddressLine1": "125 Chambers St",
+                    "streetAddressLine2": null,
+                    "streetAddressLine3": null,
+                    "city": "New York",
+                    "countrySubdivisionCode": "NY",
+                    "countryCode": "US",
+                    "postalCode": "100071331",
+                    "countyCode": "New York"
+                },
+                "coordinates": {
+                    "latitude": 40.71553,
+                    "longitude": -74.00903
+                },
+                "features": [
+                    {
+                        "code": "CS",
+                        "name": "Café Seating"
+                    },
+                    {
+                        "code": "DR",
+                        "name": "Redeem Rewards"
+                    },
+                    {
+                        "code": "GO",
+                        "name": "Starbucks Wi-Fi"
+                    },
+                    {
+                        "code": "SE",
+                        "name": "Mobile Multi Tender"
+                    },
+                    {
+                        "code": "NB",
+                        "name": "Nitro Brew"
+                    },
+                    {
+                        "code": "WA",
+                        "name": "Oven - Warmed Food"
+                    },
+                    {
+                        "code": "16",
+                        "name": "In Store"
+                    },
+                    {
+                        "code": "XO",
+                        "name": "Mobile Order and Pay"
+                    }
+                ],
+                "regulations": [
+                    {
+                        "code": "taxForOutOfStoreConsumption"
+                    },
+                    {
+                        "code": "allowGuestCheckout"
+                    }
+                ],
+                "timeZoneInfo": {
+                    "currentTimeOffset": -240,
+                    "windowsTimeZoneId": "Eastern Standard Time",
+                    "olsonTimeZoneId": "GMT-05:00 America/New_York"
+                },
+                "regularHours": {
+                    "monday": {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:30:00",
+                        "closeTime": "19:30:00"
+                    },
+                    "tuesday": {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:30:00",
+                        "closeTime": "19:30:00"
+                    },
+                    "wednesday": {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:30:00",
+                        "closeTime": "19:30:00"
+                    },
+                    "thursday": {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:30:00",
+                        "closeTime": "19:30:00"
+                    },
+                    "friday": {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:30:00",
+                        "closeTime": "19:30:00"
+                    },
+                    "saturday": {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "06:00:00",
+                        "closeTime": "19:00:00"
+                    },
+                    "sunday": {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "06:00:00",
+                        "closeTime": "18:00:00"
+                    },
+                    "open24x7": false
+                },
+                "extendedHours": [],
+                "hoursNext7Days": [
+                    {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:30:00",
+                        "closeTime": "19:30:00",
+                        "date": "2025-03-14T00:00:00.0000000",
+                        "holidayCode": null
+                    },
+                    {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "06:00:00",
+                        "closeTime": "19:00:00",
+                        "date": "2025-03-15T00:00:00.0000000",
+                        "holidayCode": null
+                    },
+                    {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "06:00:00",
+                        "closeTime": "18:00:00",
+                        "date": "2025-03-16T00:00:00.0000000",
+                        "holidayCode": null
+                    },
+                    {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:30:00",
+                        "closeTime": "19:30:00",
+                        "date": "2025-03-17T00:00:00.0000000",
+                        "holidayCode": null
+                    },
+                    {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:30:00",
+                        "closeTime": "19:30:00",
+                        "date": "2025-03-18T00:00:00.0000000",
+                        "holidayCode": null
+                    },
+                    {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:30:00",
+                        "closeTime": "19:30:00",
+                        "date": "2025-03-19T00:00:00.0000000",
+                        "holidayCode": null
+                    },
+                    {
+                        "open": true,
+                        "open24Hours": false,
+                        "openTime": "05:30:00",
+                        "closeTime": "19:30:00",
+                        "date": "2025-03-20T00:00:00.0000000",
+                        "holidayCode": null
+                    }
+                ],
+                "today": {
+                    "open": true,
+                    "open24Hours": false,
+                    "openTime": "05:30:00",
+                    "closeTime": "19:30:00",
+                    "localTime": "2025-03-14T09:20:46.0205827",
+                    "openAsOfLocalTime": true,
+                    "opensIn": null,
+                    "closesIn": "10:09:13"
+                },
+                "serviceTime": {
+                    "minimumWait": 2,
+                    "maximumWait": 5,
+                    "lineLength": 0
+                },
+                "xopState": "available",
+                "currency": "USD",
+                "sdState": null,
+                "curbside": {
+                    "state": "notSupported"
+                },
+                "accessType": "Public",
+                "guestCheckoutUrls": [
+                    {
+                        "key": "Apple",
+                        "url": "https://www.starbucks.com/menu/ordering/maps/apple/store/7466"
+                    },
+                    {
+                        "key": "Google",
+                        "url": "https://starbucks.app.link/hhgcKX7Z1Jb?storeNumber=7466&%24deeplink_path=order%3FstoreNumber%3D7466"
+                    }
+                ],
+                "legalEntityCode": "100",
+                "licenseeStore": null
+            }
+        }
+    ]
+}
